@@ -193,6 +193,7 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener, OptionView.Cal
         }
 
         override fun onVideoTaken(result: VideoResult) {
+            System.out.println("X-DEBUG: onVideoTaken in Camera Activity")
             super.onVideoTaken(result)
             LOG.w("onVideoTaken called! Launching activity.")
             VideoPreviewActivity.videoResult = result
@@ -278,18 +279,29 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener, OptionView.Cal
     }
 
     private fun captureVideoSnapshot() {
+        System.out.println("X-DEBUG: captureVideoSnapshot 1.0")
         if (camera.isTakingVideo) return run {
+            System.out.println("\tX-DEBUG: Already taking video")
             message("Already taking video.", false)
         }
         if (camera.preview != Preview.GL_SURFACE) return run {
+            System.out.println("\tX-DEBUG: Video snapshots are only allowed with the GL_SURFACE preview")
             message("Video snapshots are only allowed with the GL_SURFACE preview.", true)
         }
         message("Recording snapshot for 5 seconds...", true)
+        System.out.println("\tX-DEBUG: filesDir:" + filesDir)
         camera.takeVideoSnapshot(File(filesDir, "video.mp4"), 5000)
     }
 
     private fun toggleCamera() {
-        if (camera.isTakingPicture || camera.isTakingVideo) return
+        System.out.println("X-DEBUG: toggleCamera")
+        System.out.println("\tX-DEBUG: camera.isTakingPicture: " + camera.isTakingPicture)
+        System.out.println("\tX-DEBUG: camera.isTakingVideo: " + camera.isTakingVideo)
+
+        if (camera.isTakingPicture) {
+            return
+        }
+
         when (camera.toggleFacing()) {
             Facing.BACK -> message("Switched to back camera!", false)
             Facing.FRONT -> message("Switched to front camera!", false)

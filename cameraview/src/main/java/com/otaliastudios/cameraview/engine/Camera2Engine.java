@@ -920,6 +920,7 @@ public class Camera2Engine extends CameraBaseEngine implements
     @Override
     protected void onTakeVideoSnapshot(@NonNull VideoResult.Stub stub,
                                        @NonNull AspectRatio outputRatio) {
+        System.out.println("X-DEBUG: onTakeVideoSnapshot in Camera2Engine");
         if (!(mPreview instanceof RendererCameraPreview)) {
             throw new IllegalStateException("Video snapshots are only supported with GL_SURFACE.");
         }

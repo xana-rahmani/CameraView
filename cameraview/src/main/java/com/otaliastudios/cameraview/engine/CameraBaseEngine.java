@@ -347,6 +347,7 @@ public abstract class CameraBaseEngine extends CameraEngine {
      */
     @Override
     public final void setFacing(final @NonNull Facing facing) {
+        System.out.println("X-DEBUG: setFacing in CameraBaseEngine");
         final Facing old = mFacing;
         if (facing != old) {
             mFacing = facing;
@@ -355,8 +356,11 @@ public abstract class CameraBaseEngine extends CameraEngine {
                 @Override
                 public void run() {
                     if (collectCameraInfo(facing)) {
-                        restart();
+                        System.out.println("\tX-DEBUG: restart");
+                        start();
+//                        restart();
                     } else {
+                        System.out.println("\tX-DEBUG: old");
                         mFacing = old;
                     }
                 }
@@ -614,6 +618,7 @@ public abstract class CameraBaseEngine extends CameraEngine {
     @Override
     public final void takeVideoSnapshot(@NonNull final VideoResult.Stub stub,
                                         @NonNull final File file) {
+        System.out.println("X-DEBug: takeVideoSnapshot in CameraBaseEngine");
         getOrchestrator().scheduleStateful("take video snapshot", CameraState.BIND,
                 new Runnable() {
             @Override

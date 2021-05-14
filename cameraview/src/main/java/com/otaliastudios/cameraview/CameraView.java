@@ -351,12 +351,15 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
     @NonNull
     protected CameraEngine instantiateCameraEngine(@NonNull Engine engine,
                                                    @NonNull CameraEngine.Callback callback) {
+        System.out.println("X-DEBUG: instantiateCameraEngine");
         if (mExperimental
                 && engine == Engine.CAMERA2
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            System.out.println("\tX-DEBUG: Camera2Engine");
             return new Camera2Engine(callback);
         } else {
             mEngine = Engine.CAMERA1;
+            System.out.println("\tX-DEBUG: Camera1Engine");
             return new Camera1Engine(callback);
         }
     }
@@ -1265,6 +1268,7 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
      * @param facing a facing value.
      */
     public void setFacing(@NonNull Facing facing) {
+        System.out.println("X-DEBUG: setFacing  f:" + facing);
         mCameraEngine.setFacing(facing);
     }
 
@@ -1284,13 +1288,16 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
      * @return the new facing value
      */
     public Facing toggleFacing() {
+        System.out.println("X-DEBUG: toggleFacing");
         Facing facing = mCameraEngine.getFacing();
         switch (facing) {
             case BACK:
+                System.out.println("\tX-DEBUG: case BACK >> FRONT");
                 setFacing(Facing.FRONT);
                 break;
 
             case FRONT:
+                System.out.println("\tX-DEBUG: case FRONT >> BACK");
                 setFacing(Facing.BACK);
                 break;
         }
@@ -1696,6 +1703,7 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
      * @param cameraListener a listener for events.
      */
     public void addCameraListener(@NonNull CameraListener cameraListener) {
+        System.out.println("X-DEBUG: addCameraListener");
         mListeners.add(cameraListener);
     }
 
@@ -1791,6 +1799,7 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
      * @param file a file where the video will be saved
      */
     public void takeVideoSnapshot(@NonNull File file) {
+        System.out.println("X-DEBUG: takeVideoSnapshot");
         VideoResult.Stub stub = new VideoResult.Stub();
         mCameraEngine.takeVideoSnapshot(stub, file);
         mUiHandler.post(new Runnable() {
@@ -1866,16 +1875,19 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
      *
      */
     public void takeVideoSnapshot(@NonNull File file, int durationMillis) {
+        System.out.println("X-DEBUG: takeVideoSnapshot in CameraView");
         final int old = getVideoMaxDuration();
         addCameraListener(new CameraListener() {
             @Override
             public void onVideoTaken(@NonNull VideoResult result) {
+                System.out.println("X-DEBUG: onVideoTaken in CameraView");
                 setVideoMaxDuration(old);
                 removeCameraListener(this);
             }
 
             @Override
             public void onCameraError(@NonNull CameraException exception) {
+                System.out.println("X-DEBUG: onCameraError in CameraView");
                 super.onCameraError(exception);
                 if (exception.getReason() == CameraException.REASON_VIDEO_FAILED) {
                     setVideoMaxDuration(old);
@@ -1894,6 +1906,7 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
      * This will fire {@link CameraListener#onVideoTaken(VideoResult)}.
      */
     public void stopVideo() {
+        System.out.println("X-DEBUG: stopVideo");
         mCameraEngine.stopVideo();
         mUiHandler.post(new Runnable() {
             @Override
